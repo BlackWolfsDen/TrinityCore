@@ -32,6 +32,7 @@ void AddEventsScripts();
 void AddPetScripts();
 void AddOutdoorPvPScripts();
 void AddCustomScripts();
+void AddSC_Grumboz_VIP_Core();
 #endif
 
 void AddScripts()
@@ -49,5 +50,6 @@ void AddScripts()
     AddPetScripts();
     AddOutdoorPvPScripts();
     AddCustomScripts();
+	AddSC_Grumboz_VIP_Core();
 #endif
 }

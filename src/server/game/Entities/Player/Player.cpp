@@ -44,6 +44,7 @@
 #include "GridNotifiersImpl.h"
 #include "Group.h"
 #include "GroupMgr.h"
+#include "Grumboz_VIP_Core.h"
 #include "Guild.h"
 #include "GuildMgr.h"
 #include "InstanceSaveMgr.h"
@@ -11146,7 +11147,7 @@ InventoryResult Player::CanStoreItems(Item** items, int count, uint32* itemLimit
 //////////////////////////////////////////////////////////////////////////
 InventoryResult Player::CanEquipNewItem(uint8 slot, uint16 &dest, uint32 item, bool swap) const
 {
-    dest = 0;
+	dest = 0;
     Item* pItem = Item::CreateItem(item, 1, this);
     if (pItem)
     {
@@ -11160,7 +11161,18 @@ InventoryResult Player::CanEquipNewItem(uint8 slot, uint16 &dest, uint32 item, b
 
 InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool swap, bool not_loading) const
 {
-    dest = 0;
+	// item VIP level 0 or 1 = all players can equip.
+	uint32 acctId = GetSession()->GetAccountId();
+	uint8 Pvip = VIP::GetVIP(acctId);
+	uint8 Ivip = VIP::GetItemVIP(pItem->GetEntry());
+
+	if (Pvip < Ivip)
+	{
+		ChatHandler(GetSession()).PSendSysMessage("|cffFF0000You Must be VIP%u or higher to equip this item.|r", Ivip);
+		return EQUIP_ERR_ITEM_CANT_BE_EQUIPPED;
+	}
+
+	dest = 0;
     if (pItem)
     {
         TC_LOG_DEBUG("entities.player.items", "Player::CanEquipItem: Player '%s' (%s), Slot: %u, Item: %u, Count: %u",

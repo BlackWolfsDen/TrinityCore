@@ -117,4 +117,9 @@ void LoginDatabaseConnection::DoPrepareStatements()
     PrepareStatement(LOGIN_DEL_RBAC_ACCOUNT_PERMISSION, "DELETE FROM rbac_account_permissions WHERE accountId = ? AND permissionId = ? AND (realmId = ? OR realmId = -1)", CONNECTION_ASYNC);
     PrepareStatement(LOGIN_INS_ACCOUNT_MUTE, "INSERT INTO account_muted VALUES (?, UNIX_TIMESTAMP(), ?, ?, ?)", CONNECTION_ASYNC);
     PrepareStatement(LOGIN_SEL_ACCOUNT_MUTE_INFO, "SELECT mutedate, mutetime, mutereason, mutedby FROM account_muted WHERE guid = ? ORDER BY mutedate ASC", CONNECTION_SYNCH);
+
+	PrepareStatement(LOGIN_LOAD_VIP, "SELECT vip, mg, votes FROM account WHERE id = ?", CONNECTION_SYNCH);
+	PrepareStatement(LOGIN_SET_VIP, "UPDATE account SET `vip`=? WHERE `id`=?", CONNECTION_ASYNC);
+	PrepareStatement(LOGIN_SET_MG, "UPDATE account SET `mg`=? WHERE `id`=?", CONNECTION_ASYNC);
+	PrepareStatement(LOGIN_SET_VOTES, "UPDATE account SET `votes`=? WHERE `id`=?", CONNECTION_ASYNC);
 }
